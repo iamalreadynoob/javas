@@ -3,6 +3,7 @@ package structures;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class MultiAssign
 {
@@ -38,11 +39,17 @@ public class MultiAssign
         for (int i = 0; i < types.length; i++) putInside(types[i], names[i], vals[i]);
     }
 
-    public MultiAssign(String type, String[] names, String[] vals) {
+    public MultiAssign(String type, String[] names, String[] vals)
+    {
         declare();
+        for (int i = 0; i < names.length; i++) putInside(type, names[i], vals[i]);
     }
 
-    //TODO: Write a generic class (Datatype) and use it for getter & setter functions
+    public MultiAssign(String type, String[] names, String val)
+    {
+        declare();
+        for (String name: names) putInside(type, name, val);
+    }
 
     public Datatype getData(Types type, String name)
     {
@@ -168,7 +175,136 @@ public class MultiAssign
         return value;
     }
 
-    public class Datatype<T, Boolean>
+    public void setData(Types type, String name, Datatype data)
+    {
+        switch (type)
+        {
+            case STRING: stringVars.put(name, data.toString()); break;
+            case CHAR: charVars.put(name, data.toChar()); break;
+            case INT: intVars.put(name, data.toInt()); break;
+            case DOUBLE: doubleVars.put(name, data.toDouble()); break;
+            case BYTE: byteVars.put(name, data.toByte()); break;
+            case SHORT: shortVars.put(name, data.toShort()); break;
+            case BOOLEAN: booleanVars.put(name, data.toBoolean()); break;
+            case FLOAT: floatVars.put(name, data.toFloat()); break;
+            case CHARACTER: characterVars.put(name, data.toCharacter()); break;
+            case INTEGER: integerVars.put(name, data.toInteger()); break;
+            case DOUBLE_WRAP: wrapDoubleVars.put(name, data.toDoubleWrap()); break;
+            case FLOAT_WRAP: wrapFloatVars.put(name, data.toFloatWrap()); break;
+            case BYTE_WRAP: wrapByteVars.put(name, data.toByteWrap()); break;
+            case SHORT_WRAP: wrapShortVars.put(name, data.toShortWrap()); break;
+            case BOOLEAN_WRAP: wrapBooleanVars.put(name, data.toBooleanWrap()); break;
+            case ARR_STRING: arrStringVars.put(name, data.toArrString()); break;
+            case ARR_CHAR:
+                char[] temp = data.toArrChar();
+                Character[] casted = new Character[temp.length];
+                for (int i = 0; i < temp.length; i++) casted[i] = temp[i];
+                arrCharVars.put(name, casted);
+                break;
+            case ARR_INT:
+                int[] temp2 = data.toArrInt();
+                Integer[] casted2 = new Integer[temp2.length];
+                for (int i = 0; i < temp2.length; i++) casted2[i] = temp2[i];
+                arrIntVars.put(name, casted2);
+                break;
+            case ARR_DOUBLE:
+                double[] temp3 = data.toArrDouble();
+                Double[] casted3 = new Double[temp3.length];
+                for (int i = 0; i < temp3.length; i++) casted3[i] = temp3[i];
+                arrDoubleVars.put(name, casted3);
+                break;
+            case ARR_BYTE:
+                byte[] temp4 = data.toArrByte();
+                Byte[] casted4 = new Byte[temp4.length];
+                for (int i = 0; i < temp4.length; i++) casted4[i] = temp4[i];
+                arrByteVars.put(name, casted4);
+                break;
+            case ARR_SHORT:
+                short[] temp5 = data.toArrShort();
+                Short[] casted5 = new Short[temp5.length];
+                for (int i = 0; i < temp5.length; i++) casted5[i] = temp5[i];
+                arrShortVars.put(name, casted5);
+                break;
+            case ARR_BOOLEAN:
+                boolean[] temp6 = data.toArrBoolean();
+                Boolean[] casted6 = new Boolean[temp6.length];
+                for (int i = 0; i < temp6.length; i++) casted6[i] = temp6[i];
+                arrBooleanVars.put(name, casted6);
+                break;
+            case ARR_FLOAT:
+                float[] temp7 = data.toArrFloat();
+                Float[] casted7 = new Float[temp7.length];
+                for (int i = 0; i < temp7.length; i++) casted7[i] = temp7[i];
+                arrFloatVars.put(name, casted7);
+                break;
+            case ARR_CHARACTER: arrCharacterVars.put(name, data.toArrCharacter()); break;
+            case ARR_INTEGER: arrIntegerVars.put(name, data.toArrInteger()); break;
+            case ARR_DOUBLE_WRAP: arrWrapDoubleVars.put(name, data.toArrDoubleWrap()); break;
+            case ARR_FLOAT_WRAP: arrWrapFloatVars.put(name, data.toArrFloatWrap()); break;
+            case ARR_BYTE_WRAP: arrWrapByteVars.put(name, data.toArrByteWrap()); break;
+            case ARR_SHORT_WRAP: arrWrapShortVars.put(name, data.toArrShortWrap()); break;
+            case ARR_BOOLEAN_WRAP: arrWrapBooleanVars.put(name, data.toArrBooleanWrap()); break;
+            case AL_STRING: alStringVars.put(name, data.toListString()); break;
+            case AL_CHARACTER: alCharacterVars.put(name, data.toListCharacter()); break;
+            case AL_INTEGER: alIntegerVars.put(name, data.toListInteger()); break;
+            case AL_DOUBLE: alDoubleVars.put(name, data.toListDouble()); break;
+            case AL_FLOAT: alFloatVars.put(name, data.toListFloat()); break;
+            case AL_BYTE: alByteVars.put(name, data.toListByte()); break;
+            case AL_SHORT: alShortVars.put(name, data.toListShort()); break;
+            case AL_BOOLEAN: alBooleanVars.put(name, data.toListBoolean()); break;
+        }
+    }
+
+    public Set<String> getVarNames(Types type)
+    {
+        Set<String> vars = null;
+
+        switch (type)
+        {
+            case STRING: vars = stringVars.keySet(); break;
+            case CHAR: vars = charVars.keySet(); break;
+            case INT: vars = intVars.keySet(); break;
+            case DOUBLE: vars = doubleVars.keySet(); break;
+            case BYTE: vars = byteVars.keySet(); break;
+            case SHORT: vars = shortVars.keySet(); break;
+            case BOOLEAN: vars = booleanVars.keySet(); break;
+            case FLOAT: vars = floatVars.keySet(); break;
+            case CHARACTER: vars = characterVars.keySet(); break;
+            case INTEGER: vars = integerVars.keySet(); break;
+            case DOUBLE_WRAP: vars = wrapDoubleVars.keySet(); break;
+            case FLOAT_WRAP: vars = wrapFloatVars.keySet(); break;
+            case BYTE_WRAP: vars = wrapByteVars.keySet(); break;
+            case SHORT_WRAP: vars = wrapShortVars.keySet(); break;
+            case BOOLEAN_WRAP: vars = wrapBooleanVars.keySet(); break;
+            case ARR_STRING: vars = arrStringVars.keySet(); break;
+            case ARR_CHAR: vars = arrCharVars.keySet(); break;
+            case ARR_INT: vars = arrIntVars.keySet(); break;
+            case ARR_DOUBLE: vars = arrDoubleVars.keySet(); break;
+            case ARR_BYTE: vars = arrByteVars.keySet(); break;
+            case ARR_SHORT: vars = arrShortVars.keySet(); break;
+            case ARR_BOOLEAN: vars = arrBooleanVars.keySet(); break;
+            case ARR_FLOAT: vars = arrFloatVars.keySet(); break;
+            case ARR_CHARACTER: vars = arrCharacterVars.keySet(); break;
+            case ARR_INTEGER: vars = arrIntegerVars.keySet(); break;
+            case ARR_DOUBLE_WRAP: vars = arrWrapDoubleVars.keySet(); break;
+            case ARR_FLOAT_WRAP: vars = arrWrapFloatVars.keySet(); break;
+            case ARR_BYTE_WRAP: vars = arrWrapByteVars.keySet(); break;
+            case ARR_SHORT_WRAP: vars = arrWrapShortVars.keySet(); break;
+            case ARR_BOOLEAN_WRAP: vars = arrWrapBooleanVars.keySet(); break;
+            case AL_STRING: vars = alStringVars.keySet(); break;
+            case AL_CHARACTER: vars = alCharacterVars.keySet(); break;
+            case AL_INTEGER: vars = alIntegerVars.keySet(); break;
+            case AL_DOUBLE: vars = alDoubleVars.keySet(); break;
+            case AL_FLOAT: vars = alFloatVars.keySet(); break;
+            case AL_BYTE: vars = alFloatVars.keySet(); break;
+            case AL_SHORT: vars = alShortVars.keySet(); break;
+            case AL_BOOLEAN: vars = alBooleanVars.keySet(); break;
+        }
+
+        return vars;
+    }
+
+    public static class Datatype<T>
     {
         private T data;
         private Boolean isPrimitive;
@@ -179,25 +315,356 @@ public class MultiAssign
             this.isPrimitive = isPrimitive;
         }
 
-        public T getData()
-        {
-            return data;
-        }
-
-        public Boolean getIsPrimitive()
-        {
-            return isPrimitive;
-        }
-
-        public void setData(T data)
+        protected void setData(T data)
         {
             this.data = data;
         }
 
-        public void setIsPrimitive(Boolean isPrimitive)
+        public String toString()
         {
-            this.isPrimitive = isPrimitive;
+            if (data instanceof String) return (String) data;
+            else return null;
         }
+
+        public char toChar()
+        {
+            if (isPrimitive && data instanceof Character) return (char) data;
+            else return '\0';
+        }
+
+        public int toInt()
+        {
+            if (isPrimitive && data instanceof Integer) return (int) data;
+            else return Integer.MIN_VALUE;
+        }
+
+        public double toDouble()
+        {
+            if (isPrimitive && data instanceof Double) return (double) data;
+            else return Double.MIN_VALUE;
+        }
+
+        public byte toByte()
+        {
+            if (isPrimitive && data instanceof Byte) return (byte) data;
+            else return Byte.MIN_VALUE;
+        }
+
+        public short toShort()
+        {
+            if (isPrimitive && data instanceof Short) return (short) data;
+            else return Short.MIN_VALUE;
+        }
+
+        public boolean toBoolean()
+        {
+            if (isPrimitive && data instanceof Boolean) return (boolean) data;
+            else return false;
+        }
+
+        public float toFloat()
+        {
+            if (isPrimitive && data instanceof Float) return (float) data;
+            else return Float.MIN_VALUE;
+        }
+
+        public Character toCharacter()
+        {
+            if (!isPrimitive && data instanceof Character) return (Character) data;
+            else return null;
+        }
+
+        public Integer toInteger()
+        {
+            if (!isPrimitive && data instanceof Integer) return (Integer) data;
+            else return null;
+        }
+
+        public Double toDoubleWrap()
+        {
+            if (!isPrimitive && data instanceof Double) return (Double) data;
+            else return null;
+        }
+
+        public Float toFloatWrap()
+        {
+            if (!isPrimitive && data instanceof Float) return (Float) data;
+            else return null;
+        }
+
+        public Byte toByteWrap()
+        {
+            if (!isPrimitive && data instanceof Byte) return (Byte) data;
+            else return null;
+        }
+
+        public Short toShortWrap()
+        {
+            if (!isPrimitive && data instanceof Short) return (Short) data;
+            else return null;
+        }
+
+        public Boolean toBooleanWrap()
+        {
+            if (!isPrimitive && data instanceof Boolean) return (Boolean) data;
+            else return null;
+        }
+
+        public String[] toArrString()
+        {
+            if (data instanceof String[]) return (String[]) data;
+            else return null;
+        }
+
+        public char[] toArrChar()
+        {
+            if (isPrimitive && data instanceof Character[])
+            {
+                Character[] temp = (Character[]) data;
+
+                char[] casted = new char[temp.length];
+                for (int i = 0; i < temp.length; i++)
+                {
+                    try {casted[i] = (char) temp[i];}
+                    catch (Exception e) {casted[i] = '\0';}
+                }
+
+                return casted;
+            }
+            else return null;
+        }
+
+        public int[] toArrInt()
+        {
+            if (isPrimitive && data instanceof Integer)
+            {
+                Integer[] temp = (Integer[]) data;
+                int[] casted = new int[temp.length];
+
+                for (int i = 0; i < casted.length; i++)
+                {
+                    try {casted[i] = (int) temp[i];}
+                    catch (Exception e) {casted[i] = Integer.MIN_VALUE;}
+                }
+
+                return casted;
+
+            }
+            else return null;
+        }
+
+        public double[] toArrDouble()
+        {
+            if (isPrimitive && data instanceof Double[])
+            {
+                Double[] temp = (Double[]) data;
+                double[] casted = new double[temp.length];
+
+                for (int i = 0; i < temp.length; i++)
+                {
+                    try {casted[i] = (double) temp[i];}
+                    catch (Exception e) {casted[i] = Double.MIN_VALUE;}
+                }
+
+                return casted;
+            }
+            else return null;
+        }
+
+        public byte[] toArrByte()
+        {
+            if (isPrimitive && data instanceof Byte[])
+            {
+                Byte[] temp = (Byte[]) data;
+                byte[] casted = new byte[temp.length];
+
+                for (int i = 0; i < temp.length; i++)
+                {
+                    try {casted[i] = (byte) temp[i];}
+                    catch (Exception e) {casted[i] = Byte.MIN_VALUE;}
+                }
+
+                return casted;
+            }
+            else return null;
+        }
+
+        public short[] toArrShort()
+        {
+            if (isPrimitive && data instanceof Short[])
+            {
+                Short[] temp = (Short[]) data;
+                short[] casted = new short[temp.length];
+
+                for (int i = 0; i < temp.length; i++)
+                {
+                    try {casted[i] =  (short) temp[i];}
+                    catch (Exception e) {casted[i] = Short.MIN_VALUE;}
+                }
+
+                return casted;
+            }
+            else return null;
+        }
+
+        public boolean[] toArrBoolean()
+        {
+            if (isPrimitive && data instanceof Boolean[])
+            {
+                Boolean[] temp = (Boolean[]) data;
+                boolean[] casted = new boolean[temp.length];
+
+                for (int i = 0; i < temp.length; i++)
+                {
+                    try {casted[i] = (boolean) temp[i];}
+                    catch (Exception e) {casted[i] = false;}
+                }
+
+                return casted;
+            }
+            else return null;
+        }
+
+        public float[] toArrFloat()
+        {
+            if (isPrimitive && data instanceof Float[])
+            {
+                Float[] temp = (Float[]) data;
+                float[] casted = new float[temp.length];
+
+                for (int i = 0; i < temp.length; i++)
+                {
+                    try {casted[i] = (float) temp[i];}
+                    catch (Exception e) {casted[i] = Float.MIN_VALUE;}
+                }
+
+                return casted;
+            }
+            else return null;
+        }
+
+        public Character[] toArrCharacter()
+        {
+            if (!isPrimitive && data instanceof Character[]) return (Character[]) data;
+            else return null;
+        }
+
+        public Integer[] toArrInteger()
+        {
+            if (!isPrimitive && data instanceof Integer[]) return (Integer[]) data;
+            else return null;
+        }
+
+        public Double[] toArrDoubleWrap()
+        {
+            if (!isPrimitive && data instanceof Double[]) return (Double[]) data;
+            else return null;
+        }
+
+        public Float[] toArrFloatWrap()
+        {
+            if (!isPrimitive && data instanceof Float[]) return (Float[]) data;
+            else return null;
+        }
+
+        public Byte[] toArrByteWrap()
+        {
+            if (!isPrimitive && data instanceof Byte[]) return (Byte[]) data;
+            else return null;
+        }
+
+        public Short[] toArrShortWrap()
+        {
+            if (!isPrimitive && data instanceof Short[]) return (Short[]) data;
+            else return null;
+        }
+
+        public Boolean[] toArrBooleanWrap()
+        {
+            if (!isPrimitive && data instanceof Boolean[]) return (Boolean[]) data;
+            else return null;
+        }
+
+        public ArrayList<String> toListString()
+        {
+            if (!isPrimitive && data instanceof ArrayList)
+            {
+                try {return (ArrayList<String>) data;}
+                catch (Exception e) {return null;}
+            }
+            else return null;
+        }
+
+        public ArrayList<Character> toListCharacter()
+        {
+            if (!isPrimitive && data instanceof ArrayList)
+            {
+                try {return (ArrayList<Character>) data;}
+                catch (Exception e) {return null;}
+            }
+            else return null;
+        }
+
+        public ArrayList<Integer> toListInteger()
+        {
+            if (!isPrimitive && data instanceof ArrayList)
+            {
+                try {return (ArrayList<Integer>) data;}
+                catch (Exception e) {return null;}
+            }
+            else return null;
+        }
+
+        public ArrayList<Double> toListDouble()
+        {
+            if (!isPrimitive && data instanceof ArrayList)
+            {
+                try {return (ArrayList<Double>) data;}
+                catch (Exception e) {return null;}
+            }
+            else return null;
+        }
+
+        public ArrayList<Float> toListFloat()
+        {
+            if (!isPrimitive && data instanceof ArrayList)
+            {
+                try {return (ArrayList<Float>) data;}
+                catch (Exception e) {return null;}
+            }
+            else return null;
+        }
+
+        public ArrayList<Byte> toListByte()
+        {
+            if (!isPrimitive && data instanceof ArrayList)
+            {
+                try{return (ArrayList<Byte>) data;}
+                catch (Exception e) {return null;}
+            }
+            else return null;
+        }
+
+        public ArrayList<Short> toListShort()
+        {
+            if (!isPrimitive && data instanceof ArrayList)
+            {
+                try {return (ArrayList<Short>) data;}
+                catch (Exception e) {return null;}
+            }
+            else return null;
+        }
+
+        public ArrayList<Boolean> toListBoolean()
+        {
+            if (!isPrimitive && data instanceof ArrayList)
+            {
+                try {return (ArrayList<Boolean>) data;}
+                catch (Exception e) {return null;}
+            }
+            else return null;
+        }
+
     }
 
     private void putInside(String type, String name, String val)
