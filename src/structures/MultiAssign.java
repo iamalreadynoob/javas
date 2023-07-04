@@ -54,7 +54,7 @@ public class MultiAssign
     public Datatype getData(Types type, String name)
     {
         Datatype value = null;
-        //TODO: fix return type of arrays
+
         switch (type) {
             case STRING:
                 value = new Datatype<>(stringVars.get(name), false);
